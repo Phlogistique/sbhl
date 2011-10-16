@@ -32,8 +32,8 @@ sub scrollback_to_hl {
     my $next = ($data =~ /^\s*(n(ext)?)?\s*$/);
     my $prev = ($data =~ /^\s*p(rev)?\s*$/);
 
-    if ($next) { $i++; Irssi::print("Next HL is $i");}
-    elsif ($prev) { $i--; Irssi::print("Prev HL is $i"); }
+    if ($next) { $i++; }
+    elsif ($prev) { $i--; }
     else { $i = $data; }
 
     my $time = @{$hl{$num}}[$i-1]; # because 0 is false, we start indexing at 1
