@@ -13,7 +13,6 @@ sub sig_print_text {
 
     if ($level & MSGLEVEL_HILIGHT) {
         push @{$hl{$num}||=[]}, $time;
-        }
     }
 }
 
