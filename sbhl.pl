@@ -17,6 +17,7 @@ sub sig_print_text {
 }
 
 my %hlidx = {};
+my $at_end = 0;
 sub scrollback_to_hl {
     my ($data, $server, $witem) = @_;
     if (! $witem) {
@@ -30,18 +31,19 @@ sub scrollback_to_hl {
 
     my $next = ($data =~ /^\s*(n(ext)?)?\s*$/);
     my $prev = ($data =~ /^\s*p(rev)?\s*$/);
-
     if ($next) { $i++; }
-    elsif ($prev) { $i--; }
+    elsif ($prev) { $i-- unless $at_end; }
     else { $i = $data; }
 
-    my $time = @{$hl{$num}}[$i-1]; # because 0 is false, we start indexing at 1
+    my $time = ($i > 0) ? @{$hl{$num}}[$i-1] : 0; # because 0 is false, we start indexing at 1
 
     if ($time) {
         $hlidx{$num} = $i;
+        $at_end = 0;
         $window->command("scrollback goto $time");
         $window->command("scrollback goto -" . int($window->{height} / 2)); # center screen
     } elsif ($next) {
+        $at_end = 1;
         $window->command("scrollback end");
     } else {
         Irssi::print("Warning: no hilight numbered $i in window #$num");
